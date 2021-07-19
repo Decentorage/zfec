@@ -515,11 +515,14 @@ def encode_file_stringy_easyfec(inf, cb, k, m, chunksize=4096):
     enc = easyfec.Encoder(k, m)
 
     readsize = k*chunksize
-    indata = inf.read(readsize)
+    i = 0
+    # [readsize*part_num:(part_num+1)*readsize]
+    indata = inf[readsize * i:(i + 1) * readsize]
     while indata:
         res = enc.encode(indata)
         cb(res, len(indata))
-        indata = inf.read(readsize)
+        i += 1
+        indata = inf[readsize * i:(i + 1) * readsize]
 
 # zfec -- fast forward error correction library with Python interface
 #
